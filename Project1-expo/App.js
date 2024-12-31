@@ -7,7 +7,29 @@ class App extends Component {
         this.state = {
             selectedPhrase: '',
             image: require('./assets/biscoito.png'),
+            time: '00:00:00',
         };
+
+        this.breakCookie = this.breakCookie.bind(this);
+    }
+
+    breakCookie(phrases) {
+        clearInterval(this.setInterval);
+        this.setState({
+            selectedPhrase: phrases[Math.floor(Math.random() * phrases.length)],
+            image: require('./assets/biscoitoAberto.png'),
+        });
+
+        let time = 1;
+        this.setInterval = setInterval(() => {
+            time++;
+            let miliseconds = time % 60;
+            let seconds = Math.floor(time / 60) % 60;
+            let minutes = Math.floor(time / 3600);
+            this.setState({
+                time: `${minutes < 10 ? '0' + minutes : minutes}:${seconds < 10 ? '0' + seconds : seconds}:${miliseconds < 10 ? '0' + miliseconds : miliseconds}`,
+            });
+        });
     }
 
     render() {
@@ -23,6 +45,14 @@ class App extends Component {
 
         return (
             <View style={styles.container}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: 150, width: '100%', marginRight: 50 }}>
+                    <Image
+                        style={{ width: 50, height: 60, marginRight: 10, alignItems: 'center' }}
+                        source={require('./assets/cronometro.png')}
+                    />
+                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{this.state.time}</Text>
+                </View>
+
                 <Image
                     source={this.state.image}
                     style={{ width: 250, height: 250 }}
@@ -32,12 +62,7 @@ class App extends Component {
 
                 <TouchableOpacity
                     style={{ backgroundColor: 'lightblue', padding: 10, borderRadius: 5 }}
-                    onPress={() => {
-                        this.setState({
-                            selectedPhrase: phrases[Math.floor(Math.random() * phrases.length)],
-                            image: require('./assets/biscoitoAberto.png'),
-                        });
-                    }}>
+                    onPress={() => this.breakCookie(phrases)}>
                     <View>
                         <Text>Quebrar biscoito</Text>
                     </View>
@@ -52,6 +77,7 @@ const styles = {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#D8BFD8',
     },
 };
 
