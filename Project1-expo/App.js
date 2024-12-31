@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { Button, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Button, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 
 class App extends Component {
     constructor(props) {
@@ -8,6 +8,12 @@ class App extends Component {
             selectedPhrase: '',
             image: require('./assets/biscoito.png'),
             time: '00:00:00',
+            persons: [
+                { id: 1, name: 'João', age: 20 },
+                { id: 2, name: 'Maria', age: 30 },
+                { id: 3, name: 'José', age: 40 },
+                { id: 4, name: 'Joana', age: 50 },
+            ],
         };
 
         this.breakCookie = this.breakCookie.bind(this);
@@ -64,9 +70,24 @@ class App extends Component {
                     style={{ backgroundColor: 'lightblue', padding: 10, borderRadius: 5 }}
                     onPress={() => this.breakCookie(phrases)}>
                     <View>
-                        <Text>Quebrar biscoito</Text>
+                        <Text>Break cookie</Text>
                     </View>
                 </TouchableOpacity>
+
+                <FlatList
+                    data={this.state.persons}
+                    renderItem={({ item }) => <Person data={item} />}></FlatList>
+            </View>
+        );
+    }
+}
+
+class Person extends Component {
+    render() {
+        return (
+            <View style={{ backgroundColor: 'lightgray', marginVertical: 10, padding: 10, borderRadius: 5 }}>
+                <Text>Name: {this.props.data.name}</Text>
+                <Text>Age: {this.props.data.age}</Text>
             </View>
         );
     }
