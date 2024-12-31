@@ -1,5 +1,6 @@
 import { Component } from 'react';
-import { Button, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import Person from './src/Person';
 
 class App extends Component {
     constructor(props) {
@@ -77,17 +78,6 @@ class App extends Component {
                 <FlatList
                     data={this.state.persons}
                     renderItem={({ item }) => <Person data={item} />}></FlatList>
-            </View>
-        );
-    }
-}
-
-class Person extends Component {
-    render() {
-        return (
-            <View style={{ backgroundColor: 'lightgray', marginVertical: 10, padding: 10, borderRadius: 5 }}>
-                <Text>Name: {this.props.data.name}</Text>
-                <Text>Age: {this.props.data.age}</Text>
             </View>
         );
     }
