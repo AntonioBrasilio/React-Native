@@ -1,6 +1,7 @@
 import { Component } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import Person from './src/Person';
+import { Picker } from '@react-native-picker/picker';
 
 class App extends Component {
     constructor(props) {
@@ -14,6 +15,14 @@ class App extends Component {
                 { id: 2, name: 'Maria', age: 30 },
                 { id: 3, name: 'José', age: 40 },
                 { id: 4, name: 'Joana', age: 50 },
+            ],
+            language: 1,
+            languages: [
+                { key: 1, value: 1, label: 'JavaScript' },
+                { key: 2, value: 2, label: 'Java' },
+                { key: 3, value: 3, label: 'Python' },
+                { key: 4, value: 4, label: 'PHP' },
+                { key: 5, value: 5, label: 'C#' },
             ],
         };
 
@@ -50,6 +59,16 @@ class App extends Component {
             'A maior barreira para o sucesso é o medo do fracasso.',
         ];
 
+        let languages = this.state.languages.map((item, index) => {
+            return (
+                <Picker.Item
+                    key={index}
+                    value={item.value}
+                    label={item.label}
+                />
+            );
+        });
+
         return (
             <View style={styles.container}>
                 <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: 150, width: '100%', marginRight: 50 }}>
@@ -74,6 +93,15 @@ class App extends Component {
                         <Text>Break cookie</Text>
                     </View>
                 </TouchableOpacity>
+
+                <Picker
+                    style={{ width: '50%' }}
+                    selectedValue={this.state.language}
+                    onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
+                    {languages}
+                </Picker>
+
+                <Text>{this.state.language}</Text>
 
                 <FlatList
                     data={this.state.persons}
