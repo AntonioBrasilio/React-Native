@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import Person from './src/Person';
 import { Picker } from '@react-native-picker/picker';
+import Slider from '@react-native-community/slider';
 
 class App extends Component {
     constructor(props) {
@@ -24,6 +25,7 @@ class App extends Component {
                 { key: 4, value: 4, label: 'PHP' },
                 { key: 5, value: 5, label: 'C#' },
             ],
+            sliderValue: 0,
         };
 
         this.breakCookie = this.breakCookie.bind(this);
@@ -100,8 +102,17 @@ class App extends Component {
                     onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
                     {languages}
                 </Picker>
+                <Text>The value from Picker is {this.state.language}</Text>
 
-                <Text>{this.state.language}</Text>
+                <Slider
+                    minimumValue={0}
+                    maximumValue={100}
+                    onValueChange={(value) => this.setState({ sliderValue: value })}
+                    minimumTrackTintColor="red"
+                    maximumTrackTintColor="blue"
+                    style={{ width: '100%' }}
+                />
+                <Text>The value from Slider is {this.state.sliderValue}</Text>
 
                 <FlatList
                     data={this.state.persons}
@@ -121,4 +132,3 @@ const styles = {
 };
 
 export default App;
-
