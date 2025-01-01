@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
 import Person from './src/Person';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
@@ -26,6 +26,7 @@ class App extends Component {
                 { key: 5, value: 5, label: 'C#' },
             ],
             sliderValue: 0,
+            switchValue: false,
         };
 
         this.breakCookie = this.breakCookie.bind(this);
@@ -73,46 +74,56 @@ class App extends Component {
 
         return (
             <View style={styles.container}>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: 150, width: '100%', marginRight: 50 }}>
-                    <Image
-                        style={{ width: 50, height: 60, marginRight: 10, alignItems: 'center' }}
-                        source={require('./assets/cronometro.png')}
-                    />
-                    <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{this.state.time}</Text>
-                </View>
-
-                <Image
-                    source={this.state.image}
-                    style={{ width: 250, height: 250 }}
-                />
-
-                <Text style={{ marginVertical: 10 }}>{this.state.selectedPhrase}</Text>
-
-                <TouchableOpacity
-                    style={{ backgroundColor: 'lightblue', padding: 10, borderRadius: 5 }}
-                    onPress={() => this.breakCookie(phrases)}>
-                    <View>
-                        <Text>Break cookie</Text>
+                <ScrollView>
+                    <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center', height: 150, width: '100%', marginRight: 50 }}>
+                        <Image
+                            style={{ width: 50, height: 60, marginRight: 10, alignItems: 'center' }}
+                            source={require('./assets/cronometro.png')}
+                        />
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>{this.state.time}</Text>
                     </View>
-                </TouchableOpacity>
 
-                <Picker
-                    style={{ width: '50%' }}
-                    selectedValue={this.state.language}
-                    onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
-                    {languages}
-                </Picker>
-                <Text>The value from Picker is {this.state.language}</Text>
+                    <Image
+                        source={this.state.image}
+                        style={{ width: 250, height: 250 }}
+                    />
 
-                <Slider
-                    minimumValue={0}
-                    maximumValue={100}
-                    onValueChange={(value) => this.setState({ sliderValue: value })}
-                    minimumTrackTintColor="red"
-                    maximumTrackTintColor="blue"
-                    style={{ width: '100%' }}
-                />
-                <Text>The value from Slider is {this.state.sliderValue}</Text>
+                    <Text style={{ marginVertical: 10 }}>{this.state.selectedPhrase}</Text>
+
+                    <TouchableOpacity
+                        style={{ backgroundColor: 'lightblue', padding: 10, borderRadius: 5 }}
+                        onPress={() => this.breakCookie(phrases)}>
+                        <View>
+                            <Text>Break cookie</Text>
+                        </View>
+                    </TouchableOpacity>
+
+                    <Picker
+                        style={{ width: '50%' }}
+                        selectedValue={this.state.language}
+                        onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
+                        {languages}
+                    </Picker>
+                    <Text>The value from Picker is {this.state.language}</Text>
+
+                    <Slider
+                        minimumValue={0}
+                        maximumValue={100}
+                        onValueChange={(value) => this.setState({ sliderValue: value })}
+                        minimumTrackTintColor="red"
+                        maximumTrackTintColor="blue"
+                        style={{ width: '100%' }}
+                    />
+                    <Text>The value from Slider is {this.state.sliderValue}</Text>
+
+                    <Switch
+                        style={{ width: 50 }}
+                        value={this.state.switchValue}
+                        onValueChange={(value) => this.setState({ switchValue: value })}
+                        thumbColor={'#000'}
+                    />
+                    <Text>The value from Switch is {this.state.switchValue.toString()}</Text>
+                </ScrollView>
 
                 <FlatList
                     data={this.state.persons}
