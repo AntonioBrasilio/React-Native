@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import { FlatList, Image, ScrollView, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, ScrollView, Switch, Text, TouchableOpacity, View, Modal, Button } from 'react-native';
 import Person from './src/Person';
 import { Picker } from '@react-native-picker/picker';
 import Slider from '@react-native-community/slider';
@@ -27,6 +27,7 @@ class App extends Component {
             ],
             sliderValue: 0,
             switchValue: false,
+            isModalOpen: false,
         };
 
         this.breakCookie = this.breakCookie.bind(this);
@@ -98,6 +99,12 @@ class App extends Component {
                         </View>
                     </TouchableOpacity>
 
+                    <Button
+                        style={{ marginVertical: 10 }}
+                        title="Open Modal"
+                        onPress={() => this.setState({ isModalOpen: true })}
+                    />
+
                     <Picker
                         style={{ width: '50%' }}
                         selectedValue={this.state.language}
@@ -128,6 +135,21 @@ class App extends Component {
                 <FlatList
                     data={this.state.persons}
                     renderItem={({ item }) => <Person data={item} />}></FlatList>
+
+                <Modal
+                    transparent={true}
+                    animationType="slide"
+                    visible={this.state.isModalOpen}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20, backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                        <View style={{ backgroundColor: 'lightblue', width: '100%', height: 350, borderRadius: 25, justifyContent: 'center', alignItems: 'center' }}>
+                            <Text>Modal</Text>
+                            <Button
+                                title="Close Modal"
+                                onPress={() => this.setState({ isModalOpen: false })}
+                            />
+                        </View>
+                    </View>
+                </Modal>
             </View>
         );
     }
