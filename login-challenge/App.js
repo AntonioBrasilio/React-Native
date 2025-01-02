@@ -1,3 +1,4 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Slider from '@react-native-community/slider';
 import { Picker } from '@react-native-picker/picker';
 import { Component } from 'react';
@@ -22,6 +23,20 @@ class App extends Component {
         this.submit = this.submit.bind(this);
     }
 
+    componentDidMount() {
+        AsyncStorage.getItem('data').then((data) => {
+            if (data) {
+                const parsedData = JSON.parse(data);
+                this.setState({
+                    name: parsedData.name,
+                    sex: parsedData.sex,
+                    limit: parsedData.limit,
+                    isStudent: parsedData.isStudent,
+                });
+            }
+        });
+    }
+
     submit() {
         const data = this.state;
 
@@ -29,6 +44,7 @@ class App extends Component {
             alert('Fill all fields');
             return;
         } else {
+            AsyncStorage.setItem('data', JSON.stringify(data));
             alert(`Name: ${data.name}\nSex: ${data.sex}\nLimit: ${data.limit}\nStudent: ${data.isStudent ? 'Yes' : 'No'}`);
         }
     }
@@ -116,4 +132,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
