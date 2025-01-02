@@ -16,6 +16,7 @@ class Feed extends Component {
         this.setState({
             feed: {
                 ...this.state.feed,
+                likers: likeada ? this.state.feed.likers - 1 : this.state.feed.likers + 1,
                 likeada: !likeada,
             },
         });
@@ -31,10 +32,12 @@ class Feed extends Component {
                     />
                     <Text style={styles.name}>{this.state.feed.nome}</Text>
                 </View>
+
                 <Image
                     style={styles.post}
                     source={{ uri: this.state.feed.imgPublicacao }}
                 />
+
                 <View style={styles.likeArea}>
                     <TouchableOpacity onPress={() => this.handleLike()}>
                         <Image
@@ -49,6 +52,12 @@ class Feed extends Component {
                         />
                     </TouchableOpacity>
                 </View>
+
+                {this.state.feed.likers > 0 && (
+                    <View style={styles.likes}>
+                        <Text style={styles.likesText}>{this.state.feed.likers} curtidas</Text>
+                    </View>
+                )}
 
                 <View style={styles.description}>
                     <Text style={styles.descriptionName}>{this.state.feed.nome}</Text>
@@ -74,6 +83,7 @@ const styles = StyleSheet.create({
         fontSize: 22,
         textAlign: 'left',
         color: '#000',
+        marginLeft: 8,
     },
     post: {
         width: '100%',
@@ -82,6 +92,13 @@ const styles = StyleSheet.create({
     likeArea: {
         flexDirection: 'row',
         padding: 5,
+    },
+    likes: {
+        fontWeight: 'bold',
+        marginLeft: 5,
+    },
+    likesText: {
+        fontWeight: 'bold',
     },
     description: {
         flexDirection: 'row',
