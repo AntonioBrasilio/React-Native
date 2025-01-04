@@ -1,24 +1,25 @@
-import { useRef, useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { FlatList, StyleSheet, View } from 'react-native';
+import Filmes from './src/Filmes';
+import api from './services/api';
 
 const App = () => {
-    const [name, setName] = useState('Antonio');
+    const [filmes, setFilmes] = useState([]);
 
-    const textInputRef = useRef(null);
+    useEffect(() => {
+        const loadFilmes = async () => {
+            const response = await api.get('/r-api/?api=filmes');
+            setFilmes(response.data);
+        };
 
-    const handleClick = () => {
-        setName('Antonio Brasílio');
-        textInputRef.current.focus();
-    };
+        loadFilmes();
+    }, []);
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => handleClick()}>
-                <Text>Change name</Text>
-            </TouchableOpacity>
-            <Text>{name}</Text>
-
-            <TextInput ref={textInputRef} />
+            <FlatList
+                data={filmes}
+                renderItem={({ item }) => <Filmes data={item} />}></FlatList>
         </View>
     );
 };
