@@ -6,7 +6,7 @@ const HomeScreen = () => {
     const navigation = useNavigation();
     return (
         <View style={styles.container}>
-            <TouchableOpacity onPress={() => navigation.navigate('About', { title: 'This is the About Page' })}>
+            <TouchableOpacity onPress={() => navigation.navigate('Details')}>
                 <FontAwesmome
                     name="info-circle"
                     size={35}

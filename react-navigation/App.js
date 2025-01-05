@@ -1,39 +1,13 @@
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import AboutScreen from './src/pages/About';
-import HomeScreen from './src/pages/Home';
-import ContactScreen from './src/pages/Contact';
-
-const Stack = createNativeStackNavigator();
+import Routes from './src/routes';
 
 const App = () => {
+    const Tab = createBottomTabNavigator();
+
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen
-                    name="Home"
-                    component={HomeScreen}
-                    options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                    name="About"
-                    component={AboutScreen}
-                    options={{
-                        title: 'About Page',
-                        headerStyle: {
-                            backgroundColor: '#f4511e',
-                        },
-                        headerTintColor: '#fff',
-                        headerTitleStyle: {
-                            fontWeight: 'bold',
-                        },
-                    }}
-                />
-                <Stack.Screen
-                    name="Contact"
-                    component={ContactScreen}
-                />
-            </Stack.Navigator>
+            <Routes />
         </NavigationContainer>
     );
 };
