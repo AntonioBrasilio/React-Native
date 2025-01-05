@@ -1,30 +1,42 @@
-import { StyleSheet, Text, View } from 'react-native';
-import FontAwesmome from 'react-native-vector-icons/FontAwesome';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AboutScreen from './src/pages/About';
+import HomeScreen from './src/pages/Home';
+import ContactScreen from './src/pages/Contact';
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+const App = () => {
     return (
-        <View style={styles.container}>
-            <Text>Open up App.js to start working on your app!</Text>
-            <FontAwesmome
-                name="home"
-                size={35}
-                color="#000"
-            />
-            <FontAwesmome
-                name="search"
-                size={35}
-                color="#000"
-            />
-        </View>
+        <NavigationContainer>
+            <Stack.Navigator>
+                <Stack.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                    name="About"
+                    component={AboutScreen}
+                    options={{
+                        title: 'About Page',
+                        headerStyle: {
+                            backgroundColor: '#f4511e',
+                        },
+                        headerTintColor: '#fff',
+                        headerTitleStyle: {
+                            fontWeight: 'bold',
+                        },
+                    }}
+                />
+                <Stack.Screen
+                    name="Contact"
+                    component={ContactScreen}
+                />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
-}
+};
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
+export default App;
 
