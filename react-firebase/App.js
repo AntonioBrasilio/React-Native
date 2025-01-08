@@ -1,13 +1,17 @@
-import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native';
+import { FlatList, Modal, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native';
 import { db } from './src/firebaseConnection';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
+import EditModal from './src/EditModal';
 
 const App = () => {
     const [nome, setNome] = useState('');
     const [idade, setIdade] = useState('');
     const [cargo, setCargo] = useState('');
     const [users, setUsers] = useState([]);
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [editData, setEditData] = useState({});
 
     useEffect(() => {
         const load = async () => {
@@ -30,6 +34,17 @@ const App = () => {
 
     const deleteData = async (id) => {
         await deleteDoc(doc(db, 'users', id));
+    };
+
+    const showEditModal = (data) => {
+        setEditData({ ...data });
+        setIsModalVisible(true);
+    };
+
+    const saveEdit = async (value) => {
+        await updateDoc(doc(db, 'users', editData.id), value);
+
+        setIsModalVisible(false);
     };
 
     return (
@@ -75,9 +90,24 @@ const App = () => {
                             style={{ backgroundColor: '#AA0000', padding: 10, alignItems: 'center', marginTop: 10 }}>
                             <Text style={{ color: '#fff' }}>Deletar</Text>
                         </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => showEditModal(item)}
+                            style={{ backgroundColor: '#0000AA', padding: 10, alignItems: 'center', marginTop: 10 }}>
+                            <Text style={{ color: '#fff' }}>Editar</Text>
+                        </TouchableOpacity>
                     </View>
                 )}
             />
+
+            <Modal
+                visible={isModalVisible}
+                transparent={true}
+                animationType="slide">
+                <EditModal
+                    value={editData}
+                    saveEdit={(value) => saveEdit(value)}
+                />
+            </Modal>
         </View>
     );
 };
