@@ -1,54 +1,83 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native';
 import { db } from './src/firebaseConnection';
-import { addDoc, collection, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 const App = () => {
     const [nome, setNome] = useState('');
+    const [idade, setIdade] = useState('');
+    const [cargo, setCargo] = useState('');
+    const [users, setUsers] = useState([]);
 
     useEffect(() => {
-        async function load() {
-            // const docRef = doc(db, 'users', '1');
-            // const docSnap = await getDoc(docRef);
-
-            // if (docSnap.exists()) {
-            //     setNome(docSnap.data().nome);
-            // } else {
-            //     console.log('Documento não encontrado');
-            // }
-
-            onSnapshot(doc(db, 'users', '1'), (doc) => {
-                if (doc.exists()) {
-                    setNome(doc.data().nome);
-                } else {
-                    console.log('Documento não encontrado');
-                }
+        const load = async () => {
+            onSnapshot(collection(db, 'users'), (snapshot) => {
+                const data = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+                setUsers(data);
             });
-        }
+        };
 
         load();
     }, []);
 
-    createData = async () => {
-        // await setDoc(doc(db, 'users', '4'), {
-        //     nome: 'Antonio Teste',
-        //     idade: 22,
-        //     cargo: 'Desenvolvedor',
-        // });
-
+    const createData = async () => {
         await addDoc(collection(db, 'users'), {
-            nome: 'Antonio Teste',
-            idade: 22,
-            cargo: 'Desenvolvedor',
+            nome,
+            idade,
+            cargo,
         });
+    };
+
+    const deleteData = async (id) => {
+        await deleteDoc(doc(db, 'users', id));
     };
 
     return (
         <View style={styles.container}>
-            <Text>Nome: {nome}</Text>
-            <TouchableOpacity onPress={() => createData()}>
-                <Text>Criar</Text>
+            <View style={{ padding: 20, width: '100%' }}>
+                <Text>Nome:</Text>
+                <TextInput
+                    onChangeText={(text) => setNome(text)}
+                    style={{ borderWidth: 1, borderColor: '#000' }}
+                />
+            </View>
+            <View style={{ padding: 20, width: '100%' }}>
+                <Text>Idade:</Text>
+                <TextInput
+                    onChangeText={(text) => setIdade(text)}
+                    style={{ borderWidth: 1, borderColor: '#000' }}
+                />
+            </View>
+            <View style={{ padding: 20, width: '100%' }}>
+                <Text>Cargo:</Text>
+                <TextInput
+                    onChangeText={(text) => setCargo(text)}
+                    style={{ borderWidth: 1, borderColor: '#000' }}
+                />
+            </View>
+            <TouchableOpacity
+                style={{ backgroundColor: '#000', paddingVertical: 10, margin: 20, width: '91%', alignItems: 'center' }}
+                onPress={() => createData()}>
+                <Text style={{ color: '#fff' }}>Criar</Text>
             </TouchableOpacity>
+
+            <FlatList
+                style={{ width: '100%', padding: 20 }}
+                data={users}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                    <View style={{ padding: 20, borderBottomWidth: 1, borderBottomColor: '#000' }}>
+                        <Text>Nome: {item.nome}</Text>
+                        <Text>Idade: {item.idade}</Text>
+                        <Text>Cargo: {item.cargo}</Text>
+                        <TouchableOpacity
+                            onPress={() => deleteData(item.id)}
+                            style={{ backgroundColor: '#AA0000', padding: 10, alignItems: 'center', marginTop: 10 }}>
+                            <Text style={{ color: '#fff' }}>Deletar</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            />
         </View>
     );
 };
