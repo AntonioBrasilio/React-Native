@@ -1,6 +1,6 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { db } from './src/firebaseConnection';
-import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, onSnapshot, setDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
 const App = () => {
@@ -29,9 +29,26 @@ const App = () => {
         load();
     }, []);
 
+    createData = async () => {
+        // await setDoc(doc(db, 'users', '4'), {
+        //     nome: 'Antonio Teste',
+        //     idade: 22,
+        //     cargo: 'Desenvolvedor',
+        // });
+
+        await addDoc(collection(db, 'users'), {
+            nome: 'Antonio Teste',
+            idade: 22,
+            cargo: 'Desenvolvedor',
+        });
+    };
+
     return (
         <View style={styles.container}>
             <Text>Nome: {nome}</Text>
+            <TouchableOpacity onPress={() => createData()}>
+                <Text>Criar</Text>
+            </TouchableOpacity>
         </View>
     );
 };
