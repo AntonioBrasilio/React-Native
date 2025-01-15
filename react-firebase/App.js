@@ -1,14 +1,17 @@
 import { FlatList, Modal, StyleSheet, Text, TextInput, Touchable, TouchableOpacity, View } from 'react-native';
-import { db } from './src/firebaseConnection';
+import { auth, db } from './src/firebaseConnection';
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, setDoc, updateDoc } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import EditModal from './src/EditModal';
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from 'firebase/auth';
 
 const App = () => {
     const [nome, setNome] = useState('');
     const [idade, setIdade] = useState('');
     const [cargo, setCargo] = useState('');
     const [users, setUsers] = useState([]);
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [editData, setEditData] = useState({});
@@ -47,9 +50,56 @@ const App = () => {
         setIsModalVisible(false);
     };
 
+    const handleCreateUser = () => {
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((res) => {
+                console.log(res);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const handleLogin = async () => {
+        try {
+            const user = await signInWithEmailAndPassword(auth, email, password);
+            console.log(user);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     return (
         <View style={styles.container}>
-            <View style={{ padding: 20, width: '100%' }}>
+            <Text style={{ textAlign: 'left', width: '90%' }}>Email</Text>
+            <TextInput
+                onChangeText={(text) => setEmail(text)}
+                style={{ borderWidth: 1, borderColor: '#000', width: '90%', padding: 10 }}
+                placeholder="Digite seu email"
+            />
+
+            <Text style={{ textAlign: 'left', width: '90%', marginTop: 10 }}>Senha</Text>
+            <TextInput
+                onChangeText={(text) => setPassword(text)}
+                style={{ borderWidth: 1, borderColor: '#000', width: '90%', padding: 10 }}
+                placeholder="Digite sua senha"
+                secureTextEntry={true}
+            />
+
+            <TouchableOpacity
+                style={{ backgroundColor: '#000', padding: 10, width: '90%', alignItems: 'center', marginTop: 10 }}
+                onPress={() => handleLogin()}>
+                <Text style={{ color: '#fff' }}>Fazer login</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+                style={{ backgroundColor: '#000', padding: 10, width: '90%', alignItems: 'center', marginTop: 10 }}
+                onPress={() => handleCreateUser()}>
+                <Text style={{ color: '#fff' }}>Criar uma conta</Text>
+            </TouchableOpacity>
+
+            {/* FireBase part */}
+            {/* <View style={{ padding: 20, width: '100%' }}>
                 <Text>Nome:</Text>
                 <TextInput
                     onChangeText={(text) => setNome(text)}
@@ -107,7 +157,7 @@ const App = () => {
                     value={editData}
                     saveEdit={(value) => saveEdit(value)}
                 />
-            </Modal>
+            </Modal> */}
         </View>
     );
 };
@@ -122,4 +172,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-

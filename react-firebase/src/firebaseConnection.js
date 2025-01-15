@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
+import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDUKFLY97JniGvse5SiJNglc9bPvdYWBbY',
@@ -14,4 +15,8 @@ const app = initializeApp(firebaseConfig);
 
 const db = getFirestore(app);
 
-export { db };
+const auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(),
+});
+
+export { db, auth };
